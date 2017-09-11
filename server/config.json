@@ -1,11 +1,11 @@
 {
     "camera": [
         {
-            "ip": "/root/repo-github/pedestrian-v2/video/test.mp4",
+            "ip": "/root/repo-github/pedestrian-v3/video/test.mp4",
             "port": 554
         },
         {
-            "ip": "/root/repo-github/pedestrian-v2/video/test.mp4",
+            "ip": "/root/repo-github/pedestrian-v3/video/test.mp4",
             "port": 554
         }
     ],
