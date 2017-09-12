@@ -91,4 +91,5 @@ void MainWindow::on_pushButton_del_clicked()
         Protocol::encode_delcam_request(buf,index.toInt());
         client->call_server(buf,Protocol::HEAD_LENGTH);
     }
+     cam_manager->reconfig_camera(ui->gridLayout_2);
 }

@@ -259,12 +259,13 @@ signals:
 public slots:
     int render_set_mat(Mat frame_mat)
     {
-        int size=frame_mat.rows;
+        int size=frame_mat.total();
+      //  prt(info,"%d",size);
  // char tmp2=*f.data;
  // prt(info,"tick %d",tickmat++);
 //        if(tickmat >590&&tickmat<610)
 //            return 1;
-
+//   prt(info,"render set frame  ");
         if(size>0)
         {
        //     prt(info,"render set frame ok");
@@ -279,7 +280,7 @@ public slots:
             frame.resize(640*480*3);
             frame=Mat(640,480,CV_8UC3);
 
-            memset(frame.data,tmp_tick++,640*480*3);
+            memset(frame.data,255,640*480*3);
         //    char tmp1=*f.data;
          //   char tmp=*frame.data;
 

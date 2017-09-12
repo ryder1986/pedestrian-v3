@@ -35,18 +35,32 @@ public:
     {
         tick=0;
         tick_work=0;
-        p_video_src=new VideoSrc(data.ip);
+
+//        p_video_src=new VideoSrc(data.ip);
+//       connect(p_video_src,SIGNAL(video_disconnected()),this,SLOT(source_disconnected()));
+//       connect(p_video_src,SIGNAL(video_disconnected()),this,SLOT(source_connected()));
+p_video_src=create_video_src();
+
+
+        connected=false;
         timer=new QTimer();
         connect(timer,SIGNAL(timeout()),this,SLOT(work()));
         //   fetch_thread.start();
         timer->start(30);
-        connect(p_video_src,SIGNAL(video_disconnected()),this,SLOT(source_disconnected()));
-        connect(p_video_src,SIGNAL(video_disconnected()),this,SLOT(source_connected()));
+
     }
     ~Camera(){
         delete timer;
         delete p_video_src;
     }
+    VideoSrc *create_video_src()
+    {
+     VideoSrc *p=new VideoSrc(data.ip);
+     connect(p,SIGNAL(video_disconnected()),this,SLOT(source_disconnected()));
+     connect(p,SIGNAL(video_connected()),this,SLOT(source_connected()));
+        return p;
+    }
+
     void restart(camera_data_t dat)
     {
         data=dat;
@@ -67,11 +81,13 @@ public slots:
     void source_connected()
     {
         timer->setInterval(30);
+        connected=false;
     }
     void source_disconnected()
     {
         prt(info,"disconnected");
         timer->setInterval(1000);
+
     }
 
     void work()
@@ -85,16 +101,25 @@ public slots:
             //   std::this_thread::sleep_for(chrono::milliseconds(1000));
             delete p_video_src;
             //       std::this_thread::sleep_for(chrono::milliseconds(1000));
-            p_video_src=new VideoSrc(data.ip);
+       //     p_video_src=new VideoSrc(data.ip);
+            p_video_src=create_video_src();
             tick=0;
         }
     //    IplImage *f=p_video_src->fetch_frame();
         Mat *f=p_video_src->fetch_frame_mat();
-        if(f!=NULL&&tick_work++%1==0){
+     //   if(f!=NULL&&tick_work++%1==0){
+            if(1){
             //     if(tick+5%200>10){
-            video_handler.set_frame(f);
+
+            if(f==NULL){
+                prt(info,"get null frame");
+                mt.resize(0);
+                   video_handler.set_frame(&mt);
+            }else
+            {video_handler.set_frame(f);
 
             video_handler.work("test url");
+            }
             //   }
         }else{
       //      prt(info,"sleep start");
@@ -110,8 +135,10 @@ private:
     VideoHandler video_handler;//camera frame handler
     int tick;
     int tick_work;
+    bool connected=false;
     QList <IplImage> frame_list;
     QMutex lock;
+    Mat mt;
     //   QThread fetch_thread;
 };
 

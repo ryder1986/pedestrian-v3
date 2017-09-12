@@ -5,7 +5,7 @@
             "port": 554
         },
         {
-            "ip": "/root/repo-github/pedestrian-v3/video/test.mp4",
+            "ip": "/root/video/test.264",
             "port": 554
         }
     ],

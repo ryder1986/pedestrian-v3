@@ -32,7 +32,7 @@ public:
         int size=get_size();
         for(int i=0;i<size;i++){
             QWidget *render=(c[i])->get_render();
-            g->addWidget(render,i+1,i+1);
+            g->addWidget(render,(i)/4,(i)%4);
         }
 
     }
